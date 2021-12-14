@@ -126,22 +126,44 @@ namespace DelegatesAndEvents
         /// <inheritdoc cref="object.Equals(object?)" />
         public override bool Equals(object obj)
         {
-            // TODO improve
-            return base.Equals(obj);
+            if (obj is ObservableList<TItem>)
+            {
+                IEnumerator<TItem> objEnum = ((ObservableList<TItem>)obj).GetEnumerator();
+                foreach (var item in _items)
+                {
+                    if (!objEnum.Current.Equals(item) && !objEnum.MoveNext())
+                    {
+                        //Check every item
+                        return false;
+                    }
+                }
+
+                //Check if also obj is finished
+                if (!objEnum.MoveNext())
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <inheritdoc cref="object.GetHashCode" />
         public override int GetHashCode()
         {
-            // TODO improve
-            return base.GetHashCode();
+            return _items.GetHashCode();
         }
 
         /// <inheritdoc cref="object.ToString" />
         public override string ToString()
         {
-            // TODO improve
-            return base.ToString();
+            return _items.ToString();
         }
     }
 }
