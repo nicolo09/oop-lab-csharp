@@ -184,15 +184,16 @@ namespace OperatorsOverloading
         /// <returns>the result list.</returns>
         public static List<TValue> operator -(List<TValue> list1, List<TValue> list2)
         {
-            List<TValue> result = List.Nil<TValue>();
+            IEnumerable<TValue> result = List.Nil<TValue>().ToFlat();
+
             foreach (var item in list1.ToFlat())
             {
-                if (((TValue[])list2).Contains(item))
+                if (!((TValue[])list2).Contains(item))
                 {
-                    result += List.Of(item);
+                    result = result.Append(item);
                 }
             }
-            return result;
+            return List.From(result);
         }
 
         /// <summary>
